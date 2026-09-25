@@ -1,0 +1,328 @@
+{
+  "tp_metadata": {
+    "tp_id": "LAB1-2026-TP3",
+    "title": "TP N° 3: Búsqueda Informada y Exploración (Búsqueda Heurística)",
+    "catedra": "Laboratorio I - Tecnicatura Universitaria en Automatización y Robótica / Informática - UCSE DASS",
+    "docente": "Ing. Fabio D. Argañaraz",
+    "ciclo_lectivo": "2026",
+    "version": "1.0.0"
+  },
+  "security": {
+    "algorithm": "SHA-256 + Salted HMAC",
+    "salt_name": "CATEDRA_SALT",
+    "protected": true
+  },
+  "max_score": 100,
+  "exercises": {
+    "ej1_fundamentos_busqueda_informada": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1 (pp. 98-101); Diapositivas 1 a 5",
+      "feedback": "Una estrategia de búsqueda informada utiliza conocimiento específico del problema (heurísticas) para expandir primero los nodos más prometedores evaluados por f(n).",
+      "hashes": {
+        "definicion_heuristica": {
+          "hash": "af86f56979f4c40c9eb695465f1b3f983f71e2d2c51ee7a426a3fdc565b8d818",
+          "weight": 2.5,
+          "desc": "Definición formal de función heurística h(n)"
+        },
+        "problema_busquedas_ciegas": {
+          "hash": "3edc9971afaf338a263e671b2f39a4dc2acb585174d5332d868a9735e16fbfec",
+          "weight": 2.5,
+          "desc": "Causa de ineficiencia en búsquedas no informadas"
+        },
+        "origen_conocimiento_heuristico": {
+          "hash": "ccde5297a69646443bf8e9732cbcd056e62a0c1086ea13429ac81471fa0cc9c1",
+          "weight": 2.5,
+          "desc": "Origen del conocimiento heurístico del problema"
+        },
+        "evaluacion_primero_el_mejor": {
+          "hash": "ccefccd2d102d786809de4b2df02ae0e9cd236c1c9fcc63ba2f156478dca0c46",
+          "weight": 2.5,
+          "desc": "Criterio rector de la búsqueda primero el mejor"
+        }
+      }
+    },
+    "ej2_busqueda_voraz_greedy": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1.1 (pp. 101-104); Diapositivas 6 a 11",
+      "feedback": "La búsqueda voraz primero el mejor evalúa nodos usando únicamente f(n) = h(n); es miope, no óptima y puede ser incompleta en árboles.",
+      "hashes": {
+        "funcion_evaluacion_voraz": {
+          "hash": "cb771764202122eeea198ee706efae7d147929fe50e91217ef23515d87b5dfe9",
+          "weight": 2.5,
+          "desc": "Función de evaluación f(n) en búsqueda voraz"
+        },
+        "heuristica_dlr_rumania": {
+          "hash": "dc866d35e6bc6eac0dea5493f4cee972017123448f8400fb1c9e8f5845b884d9",
+          "weight": 2.5,
+          "desc": "Significado de hDLR en la ruta a Bucarest"
+        },
+        "optimalidad_voraz": {
+          "hash": "c38c2f53e3d3c81a344d11da41150df57e610a976df2afebb20a03a2cfdc7dc9",
+          "weight": 2.5,
+          "desc": "Análisis de optimalidad en la búsqueda voraz"
+        },
+        "completitud_voraz_arboles": {
+          "hash": "f38f57d013f650dcbaf31528ad5a6891d8869836d673dcd26aa70205ade94513",
+          "weight": 2.5,
+          "desc": "Completitud de la búsqueda voraz en árboles"
+        }
+      }
+    },
+    "ej3_trampas_voraz_caso_iasi_fagaras": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1.1 (pp. 102-104); Diapositivas 12 y 13",
+      "feedback": "El caso Iasi -> Fagaras demuestra las ventajas falsas de la búsqueda voraz: la heurística atrae hacia un callejón sin salida (Neamt) y cicla indefinidamente sin lista de explorados.",
+      "hashes": {
+        "eleccion_erronea_iasi": {
+          "hash": "07e2f343c7617efbc70c48a0a9998e3e6991d221368b4eaf365031039681ee4c",
+          "weight": 2.5,
+          "desc": "Decisión errónea inducida por la heurística en Iasi"
+        },
+        "naturaleza_neamt": {
+          "hash": "876c54c64b710d48f9a376c60a61de09bcd22de04d19aca02e4e63b8dfd5af45",
+          "weight": 2.5,
+          "desc": "Topología de la ciudad de Neamt en el mapa"
+        },
+        "camino_real_solucion": {
+          "hash": "62a90ff07c565cd2309a9db93f15fdae4e9deb46f9099e6a57f977b45d018a68",
+          "weight": 2.5,
+          "desc": "Ruta real hacia la solución verdadera"
+        },
+        "consecuencia_arbol_sin_explorados": {
+          "hash": "18fb72f347125bd4401243ed1065d9d159d933996ff135196bb7dace848dbab1",
+          "weight": 2.5,
+          "desc": "Comportamiento en árbol ante estados repetidos"
+        }
+      }
+    },
+    "ej4_algoritmo_a_estrella": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1.2 (pp. 104-106); Diapositivas 14 a 16",
+      "feedback": "A* combina el costo real acumulado g(n) con el costo estimado h(n) en f(n) = g(n) + h(n), evaluando el test objetivo únicamente al extraer el nodo para expansión.",
+      "hashes": {
+        "composicion_f": {
+          "hash": "fc9b6b8162a0936f10cc1c5863c3806cd951df72f58e080bbdf9b4ee2a415974",
+          "weight": 2.5,
+          "desc": "Fórmula canónica de evaluación f(n) de A*"
+        },
+        "significado_f": {
+          "hash": "947255b21522f129eb5c321fd3faa9d5f9e2eb0ee76bc38e15390f903e30389b",
+          "weight": 2.5,
+          "desc": "Interpretación ontológica de f(n)"
+        },
+        "momento_test_objetivo_a_star": {
+          "hash": "7a3f650a3b855bcf35e31b1a0f0cfef82e0963594cec57136beab77fbebbf6af",
+          "weight": 2.5,
+          "desc": "Momento en que se ejecuta el test objetivo en A*"
+        },
+        "estructura_frontera": {
+          "hash": "48d5c57a8991b8f7eebc60ea76a2c3415eb50dece44bb26803c031dfd4586056",
+          "weight": 2.5,
+          "desc": "Estructura de datos para la frontera de A*"
+        }
+      }
+    },
+    "ej5_trazabilidad_a_estrella_rumania": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1.2 (pp. 104-106); Diapositivas 17 a 23",
+      "feedback": "La traza de A* de Arad a Bucarest expande Sibiu (393), Rimnicu Vilcea (413), Fagaras (415) y Pitesti (417), hallando la ruta óptima de 418 km.",
+      "hashes": {
+        "paso1_expansion_arad": {
+          "hash": "0f0b842c1c0b5ae3e3310345a19156113600b1dd3c0c3206b812dfb91b1d3350",
+          "weight": 2.5,
+          "desc": "Primer nodo seleccionado tras expandir Arad"
+        },
+        "paso2_expansion_sibiu": {
+          "hash": "72043fa7baf1e83cf0003155fc951b86cac6d37ae251b6e027ffd8876a5b466f",
+          "weight": 2.5,
+          "desc": "Nodo seleccionado tras expandir Sibiu"
+        },
+        "decision_fagaras_vs_pitesti": {
+          "hash": "50ef355ca4d18e1cc6fc7fcb032b677bc226c972e27f2128ddb712e962a40a34",
+          "weight": 2.5,
+          "desc": "Decisión ante Bucarest(450) en Fagaras vs Pitesti(417)"
+        },
+        "costo_camino_optimo": {
+          "hash": "20fd02a57b374a0adb8ef760ed5936bfd1f3222c22c27c6e066f6f285634b8ed",
+          "weight": 2.5,
+          "desc": "Costo total del camino óptimo encontrado"
+        }
+      }
+    },
+    "ej6_admisibilidad_consistencia": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1.3 (pp. 106-110); Diapositiva 16",
+      "feedback": "La admisibilidad (h <= h*) asegura optimalidad en árboles; la consistencia (desigualdad triangular) asegura optimalidad en grafos sin reabrir explorados.",
+      "hashes": {
+        "definicion_admisibilidad": {
+          "hash": "d6a10cbe3f909eeba6e9575178181fc01c57144a7b12822f0c5e63d94462a975",
+          "weight": 2.0,
+          "desc": "Definición formal de heurística admisible"
+        },
+        "optimalidad_en_arboles": {
+          "hash": "5cbfdfb671c57748bd836c76cb62aa26d6fc7e42a3901055dae58b34a343c86a",
+          "weight": 2.0,
+          "desc": "Condición de optimalidad de A* en árboles"
+        },
+        "definicion_consistencia": {
+          "hash": "891d52e2c2804b904879bdaa829d41351e85b93b56b2054b3031ccd0f4e394f2",
+          "weight": 2.0,
+          "desc": "Definición de consistencia / monotonicidad"
+        },
+        "optimalidad_en_grafos": {
+          "hash": "3ad9ffa30c1d7fdbd77ad5964741beb2a1c84f1cd736a63bc1a47ceb59bccb55",
+          "weight": 2.0,
+          "desc": "Condición de optimalidad de A* en grafos"
+        },
+        "relacion_entre_ambas": {
+          "hash": "051e3e54d8f3dca46fb7e4097014ba3ab836b9641909dc85fe02f3795ec73092",
+          "weight": 2.0,
+          "desc": "Relación matemática entre consistencia y admisibilidad"
+        }
+      }
+    },
+    "ej7_desventaja_memoria_y_ida_star": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.2.1 (pp. 110-112); Diapositivas 24 a 26",
+      "feedback": "A* agota la memoria RAM (O(bᵈ)) antes que el tiempo; IDA* resuelve esto usando cortes por f-coste en memoria lineal O(b·d).",
+      "hashes": {
+        "principal_desventaja_a_star": {
+          "hash": "21cb6e33fb3fb0c55a7fb6e984497f4678a3d167a96ae7915bcdae140265f145",
+          "weight": 2.5,
+          "desc": "Principal desventaja arquitectónica de A*"
+        },
+        "fundamento_ida_star": {
+          "hash": "7da061b5890ea4697119f33e5e8d4d0167bf2546da11f3571065999eaa7ba7e1",
+          "weight": 2.5,
+          "desc": "Criterio de corte iterativo en IDA* / A*PI"
+        },
+        "actualizacion_cota_corte": {
+          "hash": "23baa97976cf9f147342c4932eaf0e4540f9bacbd7163c2146ee3c3fea42dc05",
+          "weight": 2.5,
+          "desc": "Actualización del nuevo límite en la siguiente iteración"
+        },
+        "complejidad_espacial_ida_star": {
+          "hash": "c9af89978fd899fe3cfe1436279acbc1bf96ff97f09ea5f7ff2f140621b4a463",
+          "weight": 2.5,
+          "desc": "Complejidad espacial en memoria de IDA*"
+        }
+      }
+    },
+    "ej8_busqueda_recursiva_primero_mejor": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.2.2 (pp. 112-115); Diapositivas 27 a 32",
+      "feedback": "RBFS imita la búsqueda primero el mejor en memoria lineal O(b·d) rastreando el f-valor de la mejor ruta alternativa (f_limit) y respaldando valores al retroceder.",
+      "hashes": {
+        "objetivo_diseno_rbfs": {
+          "hash": "d0ae7f17beb240e65fc27aaf27e32150fa48e3363d25e0e9149a83c76b7eb14f",
+          "weight": 2.5,
+          "desc": "Propósito central del algoritmo RBFS / BRPM"
+        },
+        "concepto_f_limit": {
+          "hash": "e2b4592284f6a92f6a6edcc05d06c2ea12581ed0b2a522d31fc69e8e05f75510",
+          "weight": 2.5,
+          "desc": "Rol del parámetro f_limit en RBFS"
+        },
+        "mecanismo_respaldo_unwind": {
+          "hash": "43d34b82adef33fb1c4364bb55951474fe2bcccb850731c85d7b2a9d08a9da4c",
+          "weight": 2.5,
+          "desc": "Respaldo del mejor f-valor al retroceder la recursión"
+        },
+        "desventaja_principal_rbfs": {
+          "hash": "b2ed176bbd7512f2c51858d1d95ea8e1da8662ea3fa04db230cb86acdbdb2468",
+          "weight": 2.5,
+          "desc": "Fenómeno de regeneración y oscilación en RBFS"
+        }
+      }
+    },
+    "ej9_diseno_heuristicas_8puzzle": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.3 (pp. 116-121)",
+      "feedback": "Tanto h1 (piezas descolocadas) como h2 (Manhattan) son admisibles y derivan de problemas relajados; h2 domina a h1 (h2 >= h1) y el máximo de ambas siempre domina.",
+      "hashes": {
+        "heuristica_h1_piezas_descolocadas": {
+          "hash": "6919043719e224cc67883375b4c410613df42197009e704398864d30a576a691",
+          "weight": 2.0,
+          "desc": "Definición formal de h1 en 8-puzzle"
+        },
+        "heuristica_h2_distancia_manhattan": {
+          "hash": "4c6fcfdb6b1f4bae3e9230dc4c367e44d8a831cdb8829b27f954b2ad5779e698",
+          "weight": 2.0,
+          "desc": "Definición formal de h2 (Manhattan) en 8-puzzle"
+        },
+        "concepto_dominancia": {
+          "hash": "bcbb69c880fceb516e82ddea6f87b569e9661f52a55bfd31e966414ca5c795d9",
+          "weight": 2.0,
+          "desc": "Dominancia matemática de h2 sobre h1"
+        },
+        "origen_problemas_relajados": {
+          "hash": "8c6a5d8188d396d2890e91a6a28e4102a090d22ee0ed828229e5895ad7f392ab",
+          "weight": 2.0,
+          "desc": "Invención de heurísticas mediante problemas relajados"
+        },
+        "combinacion_max_heuristicas": {
+          "hash": "a104604ef7731965740256a451a7fa1a63f60475f8e938e67f9086c70ba5931a",
+          "weight": 2.0,
+          "desc": "Propiedad de combinar heurísticas con el operador max"
+        }
+      }
+    },
+    "ej10_matriz_comparativa_busquedas_informadas": {
+      "weight": 10,
+      "biblio": "Russell & Norvig Cap. 4.1, 4.2 y 4.4; Diapositivas 6 a 32",
+      "feedback": "La matriz comparativa contrasta Voraz, A*, IDA* y RBFS en completitud, optimalidad y consumo de memoria (exponencial en A* vs lineal en IDA* y RBFS).",
+      "hashes": {
+        "voraz_criterio_completitud": {
+          "hash": "2d84871d90089572d106c1977fef554adfd4bae82f3545f55cb1d3cbc1f0a8a0",
+          "weight": 1.0,
+          "desc": "Completitud de Búsqueda Voraz"
+        },
+        "voraz_criterio_optimalidad": {
+          "hash": "cfbd6714723240640916e823c8bacdd9de5666e182ef553a9be7727c62dfff98",
+          "weight": 1.0,
+          "desc": "Optimalidad de Búsqueda Voraz"
+        },
+        "voraz_criterio_espacio": {
+          "hash": "40093382dd7c1548a8897e2f62eb5d8dd5f784303ca7c5d8a09b773636462883",
+          "weight": 1.0,
+          "desc": "Complejidad espacial de Búsqueda Voraz"
+        },
+        "a_star_criterio_completitud": {
+          "hash": "f7d578a6637077f5ed4338837a323391bd96938ba56bf033b871dce5b99e5c0d",
+          "weight": 1.0,
+          "desc": "Completitud de Búsqueda A*"
+        },
+        "a_star_criterio_optimalidad": {
+          "hash": "6f72ba6397df62a91cca68b5c466e4d3ce44f03d9f87a5ac12479a509598c65f",
+          "weight": 1.0,
+          "desc": "Optimalidad de Búsqueda A*"
+        },
+        "a_star_criterio_espacio": {
+          "hash": "9d0095d72de4d802562fc806c877e5b3b5c9e11850d0111ced9dab1237247c35",
+          "weight": 1.0,
+          "desc": "Complejidad espacial de Búsqueda A*"
+        },
+        "ida_star_criterio_espacio": {
+          "hash": "c2bef09aa39ff66c61af8b457565812149ea205d206ce824c6f1da0dfc0d6139",
+          "weight": 1.0,
+          "desc": "Complejidad espacial de IDA*"
+        },
+        "ida_star_criterio_optimalidad": {
+          "hash": "8bf23280fc1111343335a3b6153c5130f3510ccba22784c68e50209246acf342",
+          "weight": 1.0,
+          "desc": "Optimalidad de IDA*"
+        },
+        "rbfs_criterio_espacio": {
+          "hash": "ec28a961eb154ead4284b7297326f23244aa79e4a80fb4c3acd83ca64616615d",
+          "weight": 1.0,
+          "desc": "Complejidad espacial de RBFS"
+        },
+        "rbfs_criterio_optimalidad": {
+          "hash": "0f67d49a6d08b35a6e776c8ce3992e1dc69a3c778dab22aaface443a1c68032f",
+          "weight": 1.0,
+          "desc": "Optimalidad de RBFS"
+        }
+      }
+    }
+  }
+}

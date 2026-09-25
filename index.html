@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP N° 3: Búsqueda Informada y Exploración | Laboratorio I - UCSE DASS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-sky-500 selection:text-white">
+
+  <div class="bg-glow"></div>
+
+  <!-- Barra Superior Fija (Sticky Toolbar) -->
+  <header class="sticky top-3 z-50 max-w-5xl mx-auto px-4 mb-8">
+    <div class="bg-slate-900/85 dark:bg-slate-900/85 backdrop-blur-md border border-slate-800/80 rounded-2xl p-4 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30 tracking-wide">UCSE DASS</span>
+        <span class="font-semibold text-slate-200 text-sm hidden sm:inline">Laboratorio I &bull; TP N° 3</span>
+      </div>
+
+      <div class="flex-1 min-w-[220px] max-w-md flex flex-col gap-1.5">
+        <div class="flex justify-between items-center text-xs font-semibold">
+          <span class="text-slate-400">Progreso de la Guía:</span>
+          <span id="progress-percentage" class="text-sky-400">0%</span>
+        </div>
+        <div class="w-full bg-slate-800/90 rounded-full h-2.5 overflow-hidden border border-slate-700/50">
+          <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+        <span id="progress-count" class="text-[11px] text-slate-500 text-right block">0 de 48 completados</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-open-biblio-all" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-semibold text-xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]" title="Ver fuentes bibliográficas obligatorias">
+          <span>📚</span>
+          <span class="hidden md:inline">Guía Bibliográfica</span>
+        </button>
+        <button id="btn-git-guide" class="px-3 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-300 font-semibold text-xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]" title="Ver guía de entrega Git / GitHub">
+          <span>🚀</span>
+          <span class="hidden md:inline">Guía Git</span>
+        </button>
+        <button id="theme-toggle-btn" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 text-slate-200 text-sm transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" title="Cambiar Tema (Oscuro / Claro)">
+          🌓
+        </button>
+        <button id="btn-export-json" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-xs sm:text-sm shadow-lg hover:shadow-sky-500/25 transition-all flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]">
+          <span>💾</span>
+          <span class="hidden sm:inline">Exportar Respuestas (.json)</span>
+          <span class="sm:hidden">Exportar</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 space-y-8 pb-16">
+
+    <!-- Encabezado Institucional Hero -->
+    <section class="rounded-3xl border border-slate-800/80 bg-slate-900/70 backdrop-blur-xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500"></div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 text-xs mb-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="font-medium text-slate-300">Universidad Católica de Santiago del Estero &bull; DASS</span>
+          <span class="text-slate-600">&bull;</span>
+          <span class="text-sky-400 font-semibold">Tecnicatura Universitaria en Automatización y Robótica / Informática</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 font-semibold tracking-wide">Ciclo Lectivo 2026</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight leading-tight">
+        Trabajo Práctico N° 3: Búsqueda Informada y Exploración (Búsqueda Heurística)
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base mt-2 mb-5">
+        Cátedra de <strong class="text-slate-200">Laboratorio I</strong> &bull; Docente / JTP: <strong class="text-slate-200">Ing. Fabio D. Argañaraz</strong>
+      </p>
+
+      <div class="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+        🎯 <strong>Modalidad:</strong> Individual y autoevaluativa. Responde cada consigna seleccionando las opciones técnicas precisas.
+        Al finalizar y alcanzar el 100%, descarga tu archivo <code class="bg-slate-800 text-sky-300 px-1.5 py-0.5 rounded text-xs font-mono">respuestas_tp3.json</code> y valida tu calificación ejecutando <code class="bg-slate-800 text-sky-300 px-1.5 py-0.5 rounded text-xs font-mono">python autograder_tp3.py respuestas_tp3.json</code>.
+      </div>
+
+      <!-- Datos del Estudiante -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-6 border-t border-slate-800">
+        <div class="flex flex-col gap-1.5">
+          <label for="student-name" class="text-xs font-semibold text-slate-300">Apellido y Nombre *</label>
+          <input type="text" id="student-name" placeholder="Ej: Pérez, Juan" autocomplete="name" class="bg-slate-950/60 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none transition-all">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="student-dni" class="text-xs font-semibold text-slate-300">DNI / Matrícula *</label>
+          <input type="text" id="student-dni" placeholder="Ej: 42123456" autocomplete="off" class="bg-slate-950/60 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none transition-all">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="student-email" class="text-xs font-semibold text-slate-300">Correo Institucional</label>
+          <input type="email" id="student-email" placeholder="alumno@ucse.edu.ar" autocomplete="email" class="bg-slate-950/60 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none transition-all">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="student-comision" class="text-xs font-semibold text-slate-300">Comisión / Turno</label>
+          <input type="text" id="student-comision" placeholder="Ej: Turno Tarde" autocomplete="off" class="bg-slate-950/60 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none transition-all">
+        </div>
+        <div class="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-2">
+          <label for="student-github" class="text-xs font-semibold text-slate-300">Usuario de GitHub</label>
+          <input type="text" id="student-github" placeholder="Ej: juanperez" autocomplete="username" class="bg-slate-950/60 border border-slate-800 focus:border-sky-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none transition-all">
+        </div>
+      </div>
+    </section>
+
+    <!-- GUÍA DE EJERCICIOS (1 A 10) -->
+
+    <!-- Ejercicio 1 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej1">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 1</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Fundamentos de la Búsqueda Informada y Funciones Heurísticas</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        A diferencia de los algoritmos de búsqueda no informada que exploran el espacio de estados a ciegas, una estrategia informada incorpora conocimiento del dominio.
+        Como se señala en cátedra: <em>"La información sobre el espacio de estados puede impedir a los algoritmos cometer un error en la oscuridad"</em>.
+        Identifica los conceptos rectores de este paradigma:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Definición Formal de Función Heurística <i>h</i>(<i>n</i>):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuál es el rol matemático y conceptual de <i>h</i>(<i>n</i>) en un nodo?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej1_fundamentos_busqueda_informada" data-key="definicion_heuristica" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la definición --</option>
+              <option value="costo_incurrido_acumulado">Función de costo que mide únicamente la cantidad de pasos dados desde el nodo inicial</option>
+              <option value="estimacion_costo_al_objetivo">Función matemática que estima el costo del camino más barato desde el nodo n hasta un estado objetivo</option>
+              <option value="regla_aleatoria_runtime">Regla heurística arbitraria basada en números pseudoaleatorios generados en ejecución</option>
+              <option value="test_booleano_terminal">Condición lógica booleana que solo indica si el estado es o no terminal</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Ineficiencia de las Búsquedas No Informadas:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Por qué las búsquedas ciegas fracasan ante espacios de estados complejos?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej1_fundamentos_busqueda_informada" data-key="problema_busquedas_ciegas" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la causa --</option>
+              <option value="incompatibilidad_hardware">Incompatibilidad estricta con sistemas de procesamiento multinúcleo modernos</option>
+              <option value="factor_ramificacion_unitario">Solo son funcionales cuando el factor de ramificación efectivo b es estrictamente igual a 1</option>
+              <option value="ineficiencia_exploracion_a_ciegas">Generan estados sistemáticamente probándolos contra el objetivo sin dirección, resultando ineficientes en la oscuridad</option>
+              <option value="requiere_grafo_completo_disco">Obligan a mantener el grafo completo serializado en disco antes de comenzar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Origen del Conocimiento Heurístico:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿De dónde proviene la información utilizada por una estrategia informada?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej1_fundamentos_busqueda_informada" data-key="origen_conocimiento_heuristico" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el origen --</option>
+              <option value="llamadas_al_kernel">Interrupciones del sistema operativo calculadas por el planificador de procesos</option>
+              <option value="conocimiento_adicional_dominio">Conocimiento específico del problema más allá de la definición formal básica (ej: distancias geográficas)</option>
+              <option value="deduccion_axiomatica_sin_experiencia">Deducción axiomática pura del test objetivo sin requerir experiencia ni modelado de dominio</option>
+              <option value="inversion_operadores">Inversión simétrica de los operadores legales de transición del problema</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Principio de la Búsqueda Primero el Mejor:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo opera la función de evaluación <i>f</i>(<i>n</i>) en esta familia de algoritmos?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej1_fundamentos_busqueda_informada" data-key="evaluacion_primero_el_mejor" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el principio --</option>
+              <option value="orden_cronologico_insercion">Orden cronológico en que los nodos fueron creados en memoria RAM</option>
+              <option value="maximo_costo_camino">Expande siempre el nodo con el costo de camino g(n) más elevado para saturar la frontera</option>
+              <option value="expansion_menor_f">Selecciona para la expansión el nodo con la evaluación f(n) más baja, porque parece ser el más prometedor</option>
+              <option value="marcha_directa_infalible">Garantiza que el nodo evaluado siempre conduce sin desvíos a la meta en un solo intento</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1 pp. 98-101):</strong> "Estrategias de búsqueda con información (heurísticas)" y "Búsqueda primero el mejor". Definición de la función de evaluación <i>f</i>(<i>n</i>) y la función heurística <i>h</i>(<i>n</i>).</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 1 a 5 ("Búsqueda informada y exploración" / "Búsqueda primero el mejor").</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 2 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej2">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 2</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Búsqueda Voraz Primero el Mejor (Greedy Best-First Search)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        La búsqueda voraz primero el mejor intenta expandir el nodo más cercano al objetivo, asumiendo que conducirá rápidamente a una solución.
+        En el mapa de carreteras de Rumania, utiliza la heurística de distancia en línea recta <i>h</i><sub>DLR</sub> a Bucarest.
+        Evalúa formalmente las propiedades y comportamiento de este algoritmo:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Función de Evaluación <i>f</i>(<i>n</i>) en Búsqueda Voraz:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo se computa <i>f</i>(<i>n</i>) en esta estrategia?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej2_busqueda_voraz_greedy" data-key="funcion_evaluacion_voraz" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la función --</option>
+              <option value="f_igual_g">f(n) = g(n) (costo acumulado de camino)</option>
+              <option value="f_igual_h">f(n) = h(n) (evalúa los nodos utilizando solamente la función heurística)</option>
+              <option value="f_igual_g_mas_h">f(n) = g(n) + h(n) (suma de costo real y costo estimado)</option>
+              <option value="f_igual_g_por_h">f(n) = g(n) × h(n) (producto de costos)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Naturaleza de la Heurística <i>h</i><sub>DLR</sub> (Distancia en Línea Recta):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué representa el valor <i>h</i><sub>DLR</sub>(Arad) = 366?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej2_busqueda_voraz_greedy" data-key="heuristica_dlr_rumania" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el significado --</option>
+              <option value="peajes_y_combustible">La cantidad de peajes y combustible medido en litros hasta Bucarest</option>
+              <option value="distancia_linea_recta_bucarest">La distancia euclídea en línea recta calculada entre las coordenadas de la ciudad y Bucarest</option>
+              <option value="distancia_carretera_real">La distancia kilométrica real sumando todas las curvas de las carreteras de la red vial</option>
+              <option value="numero_ciudades_intermedias">La cantidad mínima de ciudades intermedias en el grafo de Rumania</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Análisis de Optimalidad de la Búsqueda Voraz:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Garantiza la búsqueda voraz encontrar la solución más barata?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej2_busqueda_voraz_greedy" data-key="optimalidad_voraz" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona análisis --</option>
+              <option value="siempre_optima_euclidea">Es siempre óptima porque la distancia en línea recta nunca supera la distancia real</option>
+              <option value="optima_en_grafos_aciclicos">Es óptima únicamente si el grafo no contiene bifurcaciones ni ciclos dirigidos</option>
+              <option value="no_optima_decisiones_miopes">No es óptima: toma decisiones miopes basadas solo en el atractivo local (Arad-Sibiu-Fagaras-Bucarest = 450 vs 418)</option>
+              <option value="optima_con_costos_uniformes">Es óptima siempre que todos los pasos tengan exactamente el mismo costo c = 1</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Completitud en Búsqueda en Árboles:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Es completa la búsqueda voraz primero el mejor en árboles?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej2_busqueda_voraz_greedy" data-key="completitud_voraz_arboles" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona completitud --</option>
+              <option value="siempre_completa_arboles">Es siempre completa e infalible tanto en árboles como en grafos</option>
+              <option value="incompleta_en_arboles">Es incompleta en árboles, ya que puede entrar en ciclos infinitos ante estados repetidos o callejones sin salida</option>
+              <option value="completa_con_ramificacion_acotada">Es completa únicamente si el factor de ramificación máximo es estrictamente menor a 3</option>
+              <option value="completa_por_monotonia">Es completa automáticamente debido a la monotonicidad geométrica del espacio</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1.1 pp. 101-104):</strong> "Búsqueda voraz primero el mejor". Heurística <i>h</i><sub>DLR</sub>, traza de Arad a Bucarest (costo 450) y evaluación de completitud y optimalidad.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 6 a 11 ("Búsqueda voraz primero el mejor" / Distancias en línea recta a Bucarest).</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 3 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej3">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 3</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Trampas y Deficiencias de la Búsqueda Voraz: El Caso Iasi &rarr; Fagaras</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        En las diapositivas de clase (Slide 12-13: <em>"Ventajas Falsas"</em>) se presenta un caso de estudio fundamental: encontrar una ruta para viajar desde <strong>Iasi</strong> hasta <strong>Fagaras</strong>.
+        Este contraejemplo expone con crudeza las trampas de la búsqueda voraz y los riesgos de oscilación cíclica.
+        Analiza técnicamente el escenario:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Sugerencia Engañosa de la Heurística en Iasi:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué ciudad sugiere expandir primero la heurística y por qué razón?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej3_trampas_voraz_caso_iasi_fagaras" data-key="eleccion_erronea_iasi" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la sugerencia --</option>
+              <option value="sugiere_vaslui_costo_carretera">Sugiere Vaslui porque posee una ruta pavimentada con menor costo de peaje</option>
+              <option value="sugiere_urziceni_por_latitud">Sugiere Urziceni por encontrarse alineada en la misma latitud geográfica</option>
+              <option value="sugiere_neamt_menor_distancia">Sugiere Neamt porque su distancia en línea recta a Fagaras es menor que la de Vaslui</option>
+              <option value="se_detiene_sin_conexion">Se detiene de inmediato al no encontrar carretera directa entre Iasi y Fagaras</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Topología de la Ciudad de Neamt:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué sucede cuando el agente arriba a Neamt?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej3_trampas_voraz_caso_iasi_fagaras" data-key="naturaleza_neamt" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la topología --</option>
+              <option value="meta_intermedia_recompensa">Es una meta intermedia que otorga combustible extra para continuar</option>
+              <option value="callejon_sin_salida">Es un callejón sin salida (dead-end) desde el cual no existen carreteras hacia Fagaras</option>
+              <option value="autopista_de_alta_velocidad">Es una bifurcación con autopistas directas hacia Bucarest y Fagaras</option>
+              <option value="nodo_con_costo_infinito">Es un nodo donde la función de evaluación devuelve un valor negativo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Ruta Real Hacia la Solución Válida:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuál es el camino verdadero para alcanzar Fagaras desde Iasi?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej3_trampas_voraz_caso_iasi_fagaras" data-key="camino_real_solucion" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la ruta --</option>
+              <option value="ruta_inexistente_en_mapa">No existe camino legal en la red de carreteras de Rumania entre ambas ciudades</option>
+              <option value="desvio_por_timisoara">Ir a Neamt, retroceder a Arad y tomar el desvío hacia el oeste por Timisoara</option>
+              <option value="vaslui_urziceni_bucarest_fagaras">Ir primero a Vaslui (un paso que según la heurística aleja del objetivo) y luego vía Urziceni, Bucarest y Fagaras</option>
+              <option value="salto_cuantico_directo">Saltar directamente de Iasi a Fagaras en una única transición atómica</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Consecuencia en Búsqueda en Árboles sin Registro de Estados:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué ocurre si no se descubren ni previenen los estados repetidos?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej3_trampas_voraz_caso_iasi_fagaras" data-key="consecuencia_arbol_sin_explorados" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la consecuencia --</option>
+              <option value="encuentra_solucion_polinomial">El algoritmo finaliza exitosamente encontrando la solución en tiempo polinomial</option>
+              <option value="actualizacion_automatica_pesos">La función heurística se recalibra automáticamente corrigiendo el valor de Neamt</option>
+              <option value="oscilacion_infinita_iasi_neamt">La búsqueda oscila indefinidamente entre Neamt e Iasi, sin encontrar jamás la solución</option>
+              <option value="desborde_inmediato_hardware">Ocurre una falla de hardware irrecuperable en los registros de la CPU</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1.1 pp. 102-104):</strong> "Ventajas falsas de la búsqueda voraz". Caso de ir de Iasi a Fagaras, callejón sin salida en Neamt y oscilación infinita sin control de estados repetidos.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 12 y 13 ("Ventajas Falsas / Inicio - Fin").</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 4 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 4</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Algoritmo de Búsqueda A* (A-Estrella)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        La búsqueda A* es la forma más ampliamente conocida de búsqueda primero el mejor.
+        Evalúa los nodos combinando <i>g</i>(<i>n</i>) (el costo real para alcanzar el nodo) y <i>h</i>(<i>n</i>) (el costo estimado para ir desde el nodo al objetivo).
+        Examina su formulación matemática y principios operativos:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Composición de la Función de Evaluación <i>f</i>(<i>n</i>):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuál es la fórmula formal de evaluación en el algoritmo A*?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej4_algoritmo_a_estrella" data-key="composicion_f" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la fórmula --</option>
+              <option value="f_igual_g_por_h">f(n) = g(n) × h(n) (producto del costo incurrido y la heurística)</option>
+              <option value="f_igual_g_mas_h">f(n) = g(n) + h(n) (suma del costo real acumulado g(n) y el costo estimado h(n))</option>
+              <option value="f_igual_g_menos_h">f(n) = g(n) - h(n) (diferencia del trayecto recorrido y la distancia meta)</option>
+              <option value="f_igual_max_g_h">f(n) = max(g(n), h(n)) (máximo entre ambos valores)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Significado Ontológico de <i>f</i>(<i>n</i>):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué magnitud representa exactamente el valor de <i>f</i>(<i>n</i>)?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej4_algoritmo_a_estrella" data-key="significado_f" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el significado --</option>
+              <option value="espacio_memoria_nodo">El espacio de memoria en bytes consumido por el nodo en el heap</option>
+              <option value="distancia_al_nodo_raiz">La distancia euclídea exacta entre el nodo inicial y el nodo actual n</option>
+              <option value="costo_estimado_solucion_via_n">El costo más barato estimado de una solución completa que pasa a través del nodo n</option>
+              <option value="tiempo_computacional_cpu">El tiempo promedio en milisegundos para expandir todos los sucesores de n</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Momento de Ejecución del Test Objetivo:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuándo debe evaluarse si un nodo es la meta en el algoritmo A*?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej4_algoritmo_a_estrella" data-key="momento_test_objetivo_a_star" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el momento --</option>
+              <option value="al_generar_el_nodo">Al generar el nodo hijo antes de insertarlo en la frontera (evaluación temprana)</option>
+              <option value="al_extraer_para_expansion">Al extraer el nodo de la frontera para su expansión, evitando aceptar metas subóptimas prematuramente</option>
+              <option value="antes_de_computar_h">Inmediatamente antes de invocar a la función heurística h(n)</option>
+              <option value="cuando_frontera_se_vacia">Únicamente cuando la frontera se ha vaciado por completo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Estructura de Datos para la Frontera:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué estructura soporta eficientemente la selección del nodo en A*?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej4_algoritmo_a_estrella" data-key="estructura_frontera" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la estructura --</option>
+              <option value="pila_lifo_estandar">Pila LIFO estándar donde el último nodo generado se procesa primero</option>
+              <option value="cola_prioridad_menor_f">Cola de prioridad (Priority Queue / Min-Heap) ordenada ascendentemente por el valor de f(n)</option>
+              <option value="cola_fifo_llegada">Cola FIFO estándar donde los nodos se expanden por orden de inserción</option>
+              <option value="tabla_hash_no_ordenada">Tabla hash dispersa no ordenada indexada por el nombre del estado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1.2 pp. 104-106):</strong> "Búsqueda A*". Formulación <i>f</i>(<i>n</i>) = <i>g</i>(<i>n</i>) + <i>h</i>(<i>n</i>), rol de la cola de prioridad y momento en que se aplica el test de meta.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 14 a 16 ("Búsqueda A* A-Estrella").</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 5 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 5</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Trazabilidad Paso a Paso de A* en Rumania (Arad &rarr; Bucarest)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        Las diapositivas 17 a 23 ilustran la ejecución rigurosa de A* desde Arad hasta Bucarest utilizando la heurística <i>h</i><sub>DLR</sub>.
+        Revisa las decisiones tomadas en cada paso por la cola de prioridad:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Paso 1 &mdash; Expansión de Arad:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">Hijos generados: Sibiu (g=140, h=253), Timisoara (g=118, h=329), Zerind (g=75, h=374). ¿Cuál se expande?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej5_trazabilidad_a_estrella_rumania" data-key="paso1_expansion_arad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona nodo expandido --</option>
+              <option value="timisoara_f447">Timisoara con f = 118 + 329 = 447</option>
+              <option value="zerind_f449">Zerind con f = 75 + 374 = 449</option>
+              <option value="sibiu_f393">Sibiu con f = 140 + 253 = 393, por tener el f-coste más bajo en la frontera</option>
+              <option value="oradea_f671">Oradea con f = 291 + 380 = 671</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Paso 2 &mdash; Expansión de Sibiu:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">Sucesores: Fagaras (g=239, h=176, f=415), Rimnicu Vilcea (g=220, h=193, f=413), Oradea (g=291, h=380, f=671). ¿Cuál se elige?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej5_trazabilidad_a_estrella_rumania" data-key="paso2_expansion_sibiu" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona nodo expandido --</option>
+              <option value="fagaras_f415">Fagaras con f = 239 + 176 = 415</option>
+              <option value="rimnicu_vilcea_f413">Rimnicu Vilcea con f = 220 + 193 = 413, menor que Fagaras (415) y Timisoara (447)</option>
+              <option value="oradea_f671">Oradea con f = 291 + 380 = 671</option>
+              <option value="arad_f646">Arad con f = 280 + 366 = 646</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Decisión Crítica: Fagaras vs. Pitesti:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">Al expandir Fagaras se genera Bucarest (g=450, h=0, f=450). En la frontera está Pitesti (f=417). ¿Qué hace A*?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej5_trazabilidad_a_estrella_rumania" data-key="decision_fagaras_vs_pitesti" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la decisión --</option>
+              <option value="se_detiene_en_bucarest_450">Se detiene de inmediato devolviendo la ruta por Fagaras de costo 450 por haber generado la meta</option>
+              <option value="expande_pitesti_antes_f417_menor_450">No se detiene: como 417 < 450, extrae y expande primero Pitesti, descubriendo la ruta óptima</option>
+              <option value="descarta_pitesti_por_tamanio">Descarta a Pitesti por tener menor población y continúa por Fagaras</option>
+              <option value="reevalua_f_de_bucarest">Reevalúa artificialmente a Bucarest asignándole f = 500</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Costo del Camino Óptimo Descubierto por A*:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">Ruta: Arad &rarr; Sibiu &rarr; Rimnicu Vilcea &rarr; Pitesti &rarr; Bucarest. ¿Cuál es su costo total?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej5_trazabilidad_a_estrella_rumania" data-key="costo_camino_optimo" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona costo óptimo --</option>
+              <option value="costo_voraz_450">450 km (costo de la solución subóptima devuelta por búsqueda voraz)</option>
+              <option value="costo_timisoara_447">447 km (costo de la ruta vía Timisoara)</option>
+              <option value="costo_optimo_418">418 km (140 + 80 + 97 + 101), confirmando la optimalidad de A*</option>
+              <option value="costo_linea_recta_366">366 km (distancia en línea recta hDLR entre Arad y Bucarest)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1.2 pp. 104-106):</strong> Figura 4.4: "Etapas en una búsqueda A* para Bucarest". Valores de <i>g</i>, <i>h</i> y <i>f</i> en cada paso.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 17 a 23 (Traza paso a paso de Arad a Bucarest con A*).</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 6 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 6</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Heurísticas Admisibles y Consistentes (Condiciones de Optimalidad)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        Para que A* garantice completitud y optimalidad matemática, la función heurística <i>h</i>(<i>n</i>) debe cumplir condiciones formales precisas según se opere sobre árboles o grafos.
+        Empareja cada concepto formal con su condición matemática y consecuencia teórica:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Definición Formal de Heurística Admisible:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué propiedad matemática define la admisibilidad de <i>h</i>(<i>n</i>)?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej6_admisibilidad_consistencia" data-key="definicion_admisibilidad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la definición --</option>
+              <option value="valor_entero_positivo">h(n) debe ser un número entero estrictamente positivo para cualquier nodo</option>
+              <option value="nunca_sobrestima_costo_real">h(n) ≤ h*(n) para todo n (nunca sobrestima el costo real para alcanzar la meta) y h(G) = 0 para toda meta G</option>
+              <option value="igual_a_distancia_tiempo">h(n) debe ser igual a la distancia euclídea dividida por el tiempo de reloj</option>
+              <option value="estrictamente_creciente">h(n) debe ser estrictamente creciente a medida que el agente se acerca al objetivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Garantía de Optimalidad de A* en Búsqueda en Árboles:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué condición sobre <i>h</i>(<i>n</i>) es suficiente para garantizar la solución óptima en árboles?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej6_admisibilidad_consistencia" data-key="optimalidad_en_arboles" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la condición --</option>
+              <option value="costos_unitarios_estrictos">Se requiere obligatoriamente que todos los pasos de acción tengan costo c = 1</option>
+              <option value="a_star_arbol_optimo_si_admisible">A* en búsqueda en árboles es óptimo siempre que la heurística h(n) sea admisible</option>
+              <option value="consistencia_obligatoria_arbol">La búsqueda en árboles exige estrictamente que la heurística sea monótona / consistente</option>
+              <option value="indiferente_admisibilidad">La admisibilidad solo influye en la velocidad de ejecución y no en la optimalidad</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Definición Formal de Heurística Consistente (Monotonía):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué postula la desigualdad triangular en heurísticas consistentes?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej6_admisibilidad_consistencia" data-key="definicion_consistencia" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la definición --</option>
+              <option value="heuristica_constante">h(n) debe permanecer con el mismo valor numérico constante en todo el espacio</option>
+              <option value="desigualdad_triangular_paso">Para todo nodo n y sucesor n' generado por acción a: h(n) ≤ c(n, a, n') + h(n')</option>
+              <option value="costo_g_menor_h">El costo acumulado g(n) no puede superar jamás a la heurística h(n)</option>
+              <option value="h_hermanos_iguales">Todos los nodos hermanos del árbol deben tener exactamente el mismo valor de h</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Garantía de Optimalidad de A* en Búsqueda en Grafos:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué asegura la consistencia cuando se utiliza una lista cerrada de explorados?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej6_admisibilidad_consistencia" data-key="optimalidad_en_grafos" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la garantía --</option>
+              <option value="reabrir_explorados_permanente">Obliga a reabrir permanentemente los estados de la lista cerrada aumentando el tiempo</option>
+              <option value="a_star_grafo_optimo_primera_expansion">Si h es consistente, la primera vez que se expande un estado, el camino hasta él es óptimo (sin reabrir explorados)</option>
+              <option value="almacenar_caminos_redundantes">Exige guardar copias duplicadas de todos los caminos redundantes en memoria</option>
+              <option value="invalida_la_completitud">Invalida la completitud si existen ciclos dirigidos de costo positivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">5. Relación Matemática entre Consistencia y Admisibilidad:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuál es el vínculo de inclusión formal entre ambas propiedades?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej6_admisibilidad_consistencia" data-key="relacion_entre_ambas" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la relación --</option>
+              <option value="sinonimos_identicos">Son conceptos idénticos y sinónimos intercambiables en toda demostración</option>
+              <option value="admisible_implica_consistente">Toda heurística admisible es consistente, pero no toda consistente es admisible</option>
+              <option value="consistente_implica_admisible">Toda heurística consistente es necesariamente admisible, pero una admisible puede no ser consistente</option>
+              <option value="mutuamente_excluyentes">Son propiedades incompatibles que nunca pueden coexistir en la misma heurística</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1.3 pp. 106-110):</strong> "Condiciones para la optimalidad: admisibilidad y consistencia". Desigualdad triangular, contornos de <i>f</i> y demostración de optimalidad en grafos.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositiva 16 ("Condiciones para la optimalidad de A*").</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 7 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej7">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 7</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">El Talón de Aquiles de A* y Búsqueda con Memoria Acotada (IDA*)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        En la diapositiva 24 se plantea la pregunta clave: <em>"¿Cuál creen que es la principal desventaja de A*?"</em>.
+        La respuesta fundamenta la necesidad de algoritmos de memoria acotada como <strong>A* de Profundidad Iterativa (IDA* / A*PI)</strong>.
+        Examina este compromiso arquitectónico entre tiempo y memoria:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. El Cuello de Botella Práctico de A*:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Por qué A* no es viable en problemas de gran escala?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej7_desventaja_memoria_y_ida_star" data-key="principal_desventaja_a_star" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la desventaja --</option>
+              <option value="tiempo_computacional_sumas">El tiempo excesivo que requiere la CPU para realizar sumas de enteros</option>
+              <option value="consumo_memoria_exponencial">Mantiene todos los nodos en memoria (O(bᵈ)), agotando la RAM mucho antes que el tiempo de CPU</option>
+              <option value="incapacidad_teorica_grafos">Incapacidad matemática de encontrar soluciones en grafos con más de 100 aristas</option>
+              <option value="inestabilidad_con_costos_reales">Inestabilidad numérica irreversible al operar con números flotantes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Fundamento de A* de Profundidad Iterativa (IDA* / A*PI):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuál es la diferencia principal entre IDA* y la profundidad iterativa estándar (IDDFS)?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej7_desventaja_memoria_y_ida_star" data-key="fundamento_ida_star" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el fundamento --</option>
+              <option value="corte_por_bateria_ram">El corte se ejecuta cuando la memoria RAM disponible desciende del 10%</option>
+              <option value="corte_por_f_coste">El corte utilizado es el f-coste (g + h) en lugar de la profundidad d</option>
+              <option value="profundiza_solo_por_g">Profundiza exclusivamente guiado por el costo g(n) ignorando la heurística h(n)</option>
+              <option value="filtro_de_bloom_estados">Utiliza un filtro probabilístico de Bloom para podar ramas sin evaluar f</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Actualización de la Cota de Corte en IDA*:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo se determina el límite de corte para la siguiente iteración?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej7_desventaja_memoria_y_ida_star" data-key="actualizacion_cota_corte" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona actualización --</option>
+              <option value="duplicar_corte_fijo">Se duplica el valor del corte en una progresión geométrica estricta (2, 4, 8, 16...)</option>
+              <option value="sumar_uno_arbitrario">Se incrementa el corte en exactamente 1 unidad fija sin observar los nodos</option>
+              <option value="menor_f_que_excedio_corte">Es el f-coste más pequeño de cualquier nodo que excedió el corte de la iteración anterior</option>
+              <option value="promedio_aritmetico_nodos">Se promedian los valores de f de todos los nodos visitados durante la iteración previa</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Complejidad Espacial en Memoria de IDA*:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cuánto espacio en memoria RAM consume el algoritmo IDA*?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej7_desventaja_memoria_y_ida_star" data-key="complejidad_espacial_ida_star" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona complejidad --</option>
+              <option value="espacio_exponencial_b_d">Espacio exponencial O(bᵈ), idéntico al algoritmo A* estándar</option>
+              <option value="espacio_constante_unitario">Espacio constante O(1), no retiene ningún nodo en la memoria</option>
+              <option value="espacio_lineal_b_d">Espacio lineal O(b · d), permitiendo resolver problemas grandes sin agotar la RAM</option>
+              <option value="espacio_cuadratico_polinomial">Espacio cuadrático O(d² · b²)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.2.1 pp. 110-112):</strong> "Búsqueda heurística con memoria acotada: A* de profundidad iterativa (IDA*)". Limitación de memoria de A*, cota por <i>f</i>-coste y complejidad espacial.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 24 a 26 ("¿Cuál creen que es la principal desventaja?" / "Búsqueda heurística con memoria acotada").</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 8 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 8</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Búsqueda Recursiva del Primero Mejor (RBFS / BRPM)</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        La <strong>Búsqueda Recursiva del Primero Mejor (RBFS / BRPM)</strong> es un algoritmo elegante que imita la búsqueda primero el mejor pero en espacio lineal.
+        En las diapositivas 27 a 32 se expone su mecanismo recursivo, el límite alternativo y el respaldo de <i>f</i>-valores.
+        Analiza su arquitectura interna:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Objetivo Central del Algoritmo RBFS:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué propósito de ingeniería motivó la creación de RBFS?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej8_busqueda_recursiva_primero_mejor" data-key="objetivo_diseno_rbfs" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el objetivo --</option>
+              <option value="reemplazar_redes_neuronales">Sustituir las funciones heurísticas mediante redes neuronales profundas con tensores</option>
+              <option value="imitar_primero_mejor_espacio_lineal">Imitar la operación de la búsqueda primero el mejor estándar pero utilizando sólo un espacio lineal</option>
+              <option value="saturar_memoria_cache">Almacenar todo el grafo en memoria caché L3 para maximizar la velocidad</option>
+              <option value="busqueda_bidireccional_multihilo">Ejecutar búsquedas bidireccionales concurrentes con múltiples subprocesos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Rol del Parámetro <i>f_limit</i>:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué información retiene la cota durante el descenso recursivo?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej8_busqueda_recursiva_primero_mejor" data-key="concepto_f_limit" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el rol --</option>
+              <option value="limite_recursiones_so">El límite máximo de llamadas a funciones que permite la pila de ejecución del sistema operativo</option>
+              <option value="f_valor_mejor_camino_alternativo_antepasados">El f-valor del mejor camino alternativo disponible desde cualquier antepasado del nodo actual</option>
+              <option value="consumo_combustible_maximo">El costo máximo en kilómetros que el vehículo puede recorrer antes de repostar</option>
+              <option value="profundidad_estatica_usuario">Una constante fija ingresada por el usuario en los argumentos de la línea de comandos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Mecanismo de Respaldo al Retroceder (Unwinding):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo recuerda RBFS la calidad del subárbol que está olvidando?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej8_busqueda_recursiva_primero_mejor" data-key="mecanismo_respaldo_unwind" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona mecanismo --</option>
+              <option value="borrado_sin_rastro">Elimina el subárbol definitivamente sin guardar ningún rastro de su calidad</option>
+              <option value="respalda_mejor_f_de_hijos_en_ancestro">Sustituye los f-valores del camino con el mejor f-valor de su hijo (backed-up value) para recordarlo</option>
+              <option value="invierte_orden_pila">Invierte el orden de la pila de llamadas transformándola en una cola FIFO</option>
+              <option value="reinicio_desde_cero">Aborta la búsqueda y reinicia desde la raíz con una cota infinita</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Principal Desventaja o Ineficiencia de RBFS:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué problema puede experimentar RBFS en espacios con alternativas cercanas?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej8_busqueda_recursiva_primero_mejor" data-key="desventaja_principal_rbfs" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la desventaja --</option>
+              <option value="memoria_infinita_respaldos">Consumo infinito de memoria RAM debido a la tabla de respaldos</option>
+              <option value="incompletitud_intrínseca">Incompletitud intrínseca que le impide alcanzar la meta en cualquier problema</option>
+              <option value="regeneracion_excesiva_oscilacion_caminos_cercanos">Regeneración excesiva de nodos (oscilación / thrashing) al cambiar repetidamente entre caminos de f similar</option>
+              <option value="solo_aristas_negativas">Solo es aplicable si todas las aristas del grafo poseen ponderaciones negativas</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.2.2 pp. 112-115):</strong> "Búsqueda recursiva del primero mejor (RBFS)". Pseudoalgoritmo, cota <i>f_limit</i>, regeneración de nodos y valores respaldados.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 27 a 32 ("Búsqueda recursiva del primero mejor (BRPM)" / Traza con Rimnicu Vilcea y Fagaras).</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 9 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej9">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 9</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Diseño e Invención de Heurísticas: 8-Puzzle y Problemas Relajados</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        El problema del 8-puzzle es el caso clásico para estudiar el diseño sistemático de heurísticas, la dominancia matemática y la técnica de derivación mediante <strong>problemas relajados</strong>.
+        Responde las siguientes consignas conceptuales:
+      </p>
+
+      <div class="space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">1. Definición de la Heurística <i>h</i><sub>1</sub> (Piezas Descolocadas):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo se computa <i>h</i><sub>1</sub> en cualquier configuración del 8-puzzle?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej9_diseno_heuristicas_8puzzle" data-key="heuristica_h1_piezas_descolocadas" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la definición --</option>
+              <option value="movimientos_hueco_esquina">Cantidad de movimientos necesarios para llevar la casilla vacía a la esquina superior izquierda</option>
+              <option value="piezas_fuera_de_lugar">Número de piezas o fichas que no se encuentran en su casilla objetivo final (sin contar el hueco)</option>
+              <option value="distancia_centro_ficha8">Distancia euclídea medida desde el centro del tablero hasta la ficha 8</option>
+              <option value="inversiones_de_paridad">Número total de inversiones de paridad presentes en la permutación actual</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">2. Definición de la Heurística <i>h</i><sub>2</sub> (Distancia de Manhattan):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo se calcula formalmente la distancia Manhattan en la cuadrícula?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej9_diseno_heuristicas_8puzzle" data-key="heuristica_h2_distancia_manhattan" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la definición --</option>
+              <option value="hipotenusa_pitagoras">Distancia en línea recta hipotenusa calculada mediante el teorema de Pitágoras</option>
+              <option value="suma_distancias_manhattan_a_meta">Suma de las distancias horizontales y verticales (bloques) de cada ficha a su casilla meta</option>
+              <option value="multiplicacion_coordenadas">Multiplicación de las coordenadas cartesianas (x × y) de las fichas desordenadas</option>
+              <option value="fichas_misma_fila">Cantidad de fichas que coinciden en fila pero no en columna con su casilla final</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">3. Concepto y Consecuencia de la Dominancia (<i>h</i><sub>2</sub> vs. <i>h</i><sub>1</sub>):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Qué significa formalmente que una heurística domine a otra?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej9_diseno_heuristicas_8puzzle" data-key="concepto_dominancia" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la relación --</option>
+              <option value="h1_domina_menor_cpu">h1 domina a h2 porque insume menos ciclos de instrucción en la ALU de la CPU</option>
+              <option value="h2_domina_a_h1_menos_nodos">Para todo estado n, h2(n) ≥ h1(n); por ende h2 domina a h1 y expande menos o igual cantidad de nodos</option>
+              <option value="ninguna_domina_equivalentes">Ninguna domina a la otra porque generan árboles de búsqueda exactamente idénticos</option>
+              <option value="h1_domina_en_el_final">h1 domina a h2 únicamente cuando el puzzle se encuentra a un movimiento de resolverse</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">4. Invención de Heurísticas Mediante Problemas Relajados:</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">¿Cómo surgen matemáticamente las funciones <i>h</i><sub>1</sub> y <i>h</i><sub>2</sub>?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej9_diseno_heuristicas_8puzzle" data-key="origen_problemas_relajados" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona el origen --</option>
+              <option value="restringir_mas_el_juego">Agregando restricciones adicionales que prohíben mover ciertas piezas</option>
+              <option value="relajar_restricciones_acciones_originales">Relajando restricciones a las acciones del problema (ej: permitir mover a casillas ocupadas)</option>
+              <option value="reducir_tablero_dos_por_dos">Reduciendo las dimensiones del tablero a 2×2 para simplificar el cómputo</option>
+              <option value="algoritmo_genetico_offline">Entrenando un algoritmo genético de optimización durante horas offline</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/50 rounded-xl border border-slate-800/80 hover:border-slate-700/80 transition-all gap-3.5">
+          <div class="sm:max-w-md">
+            <strong class="font-semibold text-sky-400 text-sm block">5. Combinación con el Operador Máximo (max):</strong>
+            <span class="text-xs text-slate-400 mt-0.5 block leading-normal">Si se tienen varias heurísticas admisibles <i>h</i><sub>1</sub>...<i>h</i><sub><i>k</i></sub>, ¿qué propiedad posee su máximo?</span>
+          </div>
+          <div class="sm:w-80 md:w-96">
+            <select data-ex="ej9_diseno_heuristicas_8puzzle" data-key="combinacion_max_heuristicas" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all shadow-sm cursor-pointer hover:border-slate-600">
+              <option value="" disabled selected>-- Selecciona la propiedad --</option>
+              <option value="promedio_aritmetico_mejor">El promedio aritmético es preferible porque balancea las sobrestimaciones</option>
+              <option value="max_es_admisible_y_domina">h(n) = max(h1, ..., hk) es siempre admisible y domina a todas las heurísticas componentes</option>
+              <option value="producto_heuristicas">El producto h(n) = h1 × h2 es admisible siempre que h ≤ 1</option>
+              <option value="invalida_admisibilidad">El operador máximo destruye la admisibilidad sobrestimando el costo real</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.3 pp. 116-121):</strong> "Funciones heurísticas". El 8-puzzle, piezas descolocadas <i>h</i><sub>1</sub>, distancia Manhattan <i>h</i><sub>2</sub>, dominancia y derivación a partir de problemas relajados.</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- Ejercicio 10 -->
+    <article class="exercise-card rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-lg p-6 sm:p-8 shadow-xl hover:border-slate-700/80 transition-all" id="ej10">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800/80">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/20">Ejercicio 10</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-100">Matriz Comparativa de Estrategias de Búsqueda Informada</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">10 Puntos</span>
+      </div>
+
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        Sintetiza las propiedades asintóticas y de desempeño de las 4 estrategias informadas fundamentales vistas en cátedra (Voraz, A*, IDA* y RBFS).
+        Completa la matriz evaluativa seleccionando el comportamiento formal de cada algoritmo en los tres ejes fundamentales:
+      </p>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 shadow-2xl mb-6">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+          <thead class="bg-slate-800/90 text-xs uppercase tracking-wider text-slate-400 border-b border-slate-700">
+            <tr>
+              <th class="px-4 py-3.5 font-bold">Estrategia</th>
+              <th class="px-4 py-3.5 font-bold">Completitud</th>
+              <th class="px-4 py-3.5 font-bold">Optimalidad</th>
+              <th class="px-4 py-3.5 font-bold">Complejidad Espacial (Memoria)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 bg-slate-900/40">
+            <!-- Fila Voraz -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="px-4 py-3.5 font-semibold text-sky-400 whitespace-nowrap">
+                Búsqueda Voraz Primero el Mejor
+                <span class="block text-[11px] text-slate-500 font-normal">f(n) = h(n)</span>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="voraz_criterio_completitud" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Completitud --</option>
+                  <option value="incompleta_arboles_completa_grafos_finitos">Incompleta en árboles (puede ciclar); completa en grafos con espacios finitos</option>
+                  <option value="siempre_completa">Siempre completa en cualquier estructura</option>
+                  <option value="incompleta_siempre">Incompleta en árboles y en grafos</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="voraz_criterio_optimalidad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Optimalidad --</option>
+                  <option value="optima_con_dlr">Óptima con distancia en línea recta</option>
+                  <option value="no_optima">No óptima (decisiones miopes guiadas por atractivo local)</option>
+                  <option value="siempre_optima">Siempre óptima en cualquier grafo</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="voraz_criterio_espacio" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Memoria --</option>
+                  <option value="lineal_b_m">O(b · m) Lineal</option>
+                  <option value="exponencial_b_m">O(bᵐ) Exponencial (retiene todos los nodos en frontera)</option>
+                  <option value="constante_o1">O(1) Constante</option>
+                </select>
+              </td>
+            </tr>
+
+            <!-- Fila A* -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="px-4 py-3.5 font-semibold text-sky-400 whitespace-nowrap">
+                Búsqueda A* (A-Estrella)
+                <span class="block text-[11px] text-slate-500 font-normal">f(n) = g(n) + h(n)</span>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="a_star_criterio_completitud" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Completitud --</option>
+                  <option value="incompleta_con_ciclos">Incompleta en grafos cíclicos</option>
+                  <option value="completa_si_b_finito_y_costos_positivos">Completa si el factor de ramificación b es finito y costos de paso c ≥ ε > 0</option>
+                  <option value="completa_solo_h_nula">Completa únicamente si h(n) es nula en todos los nodos</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="a_star_criterio_optimalidad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Optimalidad --</option>
+                  <option value="optima_admisible_arbol_consistente_grafo">Óptima en árboles con h admisible, y óptima en grafos con h consistente</option>
+                  <option value="suboptima_general">Subóptima salvo con costos estrictamente unitarios</option>
+                  <option value="nunca_optima">No óptima debido al sesgo de g(n)</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="a_star_criterio_espacio" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Memoria --</option>
+                  <option value="lineal_b_d">O(b · d) Lineal</option>
+                  <option value="exponencial_b_d_gran_limitacion">O(bᵈ) Exponencial (retiene todos los nodos en memoria, su gran limitación)</option>
+                  <option value="logaritmica">O(log d)</option>
+                </select>
+              </td>
+            </tr>
+
+            <!-- Fila IDA* -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="px-4 py-3.5 font-semibold text-sky-400 whitespace-nowrap">
+                IDA* (A* Profundidad Iterativa)
+                <span class="block text-[11px] text-slate-500 font-normal">Corte por f-coste</span>
+              </td>
+              <td class="px-4 py-3.5 text-slate-400 text-xs italic">
+                Completa (b finito, c ≥ ε > 0)
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="ida_star_criterio_optimalidad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Optimalidad --</option>
+                  <option value="no_optima_por_olvido">No óptima porque olvida caminos explorados previamente</option>
+                  <option value="optima_con_h_admisible">Óptima siempre que la heurística h sea admisible / consistente</option>
+                  <option value="optima_solo_primera_cota">Solo es óptima durante la primera iteración</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="ida_star_criterio_espacio" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Memoria --</option>
+                  <option value="exponencial_b_d">O(bᵈ) Exponencial</option>
+                  <option value="lineal_b_d_elimina_cuello_botella">O(b · d) Lineal (elimina el cuello de botella de memoria de A*)</option>
+                  <option value="constante">O(1) Constante</option>
+                </select>
+              </td>
+            </tr>
+
+            <!-- Fila RBFS -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="px-4 py-3.5 font-semibold text-sky-400 whitespace-nowrap">
+                RBFS (Recursiva Primero el Mejor)
+                <span class="block text-[11px] text-slate-500 font-normal">f_limit y valores respaldados</span>
+              </td>
+              <td class="px-4 py-3.5 text-slate-400 text-xs italic">
+                Completa (b finito, c ≥ ε > 0)
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="rbfs_criterio_optimalidad" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Optimalidad --</option>
+                  <option value="incompleta_y_suboptima">Subóptima con error ilimitado</option>
+                  <option value="optima_con_h_admisible_no_decreciente">Óptima siempre que la heurística h sea admisible y no decreciente</option>
+                  <option value="optima_solo_binario">Óptima únicamente en árboles estrictamente binarios</option>
+                </select>
+              </td>
+              <td class="px-4 py-3.5">
+                <select data-ex="ej10_matriz_comparativa_busquedas_informadas" data-key="rbfs_criterio_espacio" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-sky-500 cursor-pointer">
+                  <option value="" disabled selected>-- Memoria --</option>
+                  <option value="exponencial_b_m">O(bᵐ) Exponencial</option>
+                  <option value="lineal_b_d_imita_primero_mejor">O(b · d) Lineal (imita la búsqueda primero el mejor en memoria lineal)</option>
+                  <option value="cuadratica">O(d²)</option>
+                </select>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <details class="group mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-200/90 transition-all">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-amber-400 hover:text-amber-300 select-none">
+          <span>📖 Dónde estudiar este tema en la bibliografía</span>
+          <span class="transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-amber-500/20 text-slate-300 space-y-1 leading-relaxed">
+          <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell &amp; Norvig</a> (Cap. 4.1, 4.2 y 4.4 pp. 101-115, 122):</strong> Comparativa formal de estrategias informadas: Voraz, A*, IDA*, RBFS y algoritmos de memoria simplificada SMA*.</p>
+          <p><strong>Presentación Clase 4:</strong> Diapositivas 6 a 32.</p>
+        </div>
+      </details>
+    </article>
+
+    <!-- TARJETA FINAL DE EXPORTACIÓN Y CONTROL -->
+    <section class="export-card rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
+      <div class="mb-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-100 mb-2 flex items-center gap-2.5">
+          <span>📥</span>
+          <span>Entrega y Exportación de Respuestas</span>
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Verifica que tu progreso haya alcanzado el 100%. Luego genera tu archivo oficial <code class="bg-slate-800 text-sky-300 px-1.5 py-0.5 rounded text-xs font-mono">respuestas_tp3.json</code> para someterlo al evaluador local y subirlo a tu repositorio de GitHub.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button id="btn-export-bottom" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-sm shadow-lg hover:shadow-sky-500/25 transition-all cursor-pointer flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+          <span>📥</span>
+          <span>Generar y Descargar respuestas_tp3.json</span>
+        </button>
+        <button id="btn-toggle-preview" class="px-4 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 text-sm font-semibold transition-all cursor-pointer">
+          👁️ Previsualizar JSON en Pantalla
+        </button>
+        <button id="btn-copy-json" class="px-4 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 text-sm font-semibold transition-all cursor-pointer">
+          📋 Copiar JSON al Portapapeles
+        </button>
+      </div>
+
+      <!-- Contenedor Colapsable de Previsualización -->
+      <div id="json-preview-container" class="mt-6 p-4 rounded-2xl bg-slate-950 border border-slate-800 shadow-inner" style="display: none;">
+        <div class="text-xs font-semibold text-slate-400 mb-2">
+          Vista previa en vivo de <code class="text-sky-400">respuestas_tp3.json</code>:
+        </div>
+        <pre class="overflow-x-auto text-xs font-mono text-sky-300/90 leading-relaxed p-2 max-h-96"><code id="json-preview-code">{}</code></pre>
+      </div>
+
+      <!-- Zona de Restauración / Importación -->
+      <div class="mt-6 pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+        <span>¿Necesitas retomar una entrega previa?</span>
+        <label for="import-json-file" class="text-sky-400 hover:text-sky-300 underline font-semibold cursor-pointer transition-colors">
+          Cargar archivo respuestas_tp3.json previo
+        </label>
+        <input type="file" id="import-json-file" accept=".json" style="display: none;">
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-8 text-xs text-slate-500 space-y-1 border-t border-slate-800/60 max-w-5xl mx-auto px-4">
+    <p>&copy; 2026 Universidad Católica de Santiago del Estero (UCSE) &bull; DASS</p>
+    <p>Cátedra de Laboratorio I &bull; Docente: Ing. Fabio D. Argañaraz &bull; Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- ==================== MODAL GUÍA BIBLIOGRÁFICA ==================== -->
+  <div class="modal-overlay" id="modal-biblio">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">📚 Mapa Bibliográfico Obligatorio — TP N° 3</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Todo el contenido del Trabajo Práctico N° 3 (Búsqueda Informada y Exploración) se fundamenta estrictamente en la bibliografía oficial de cátedra:</p>
+        
+        <h4>Libro Principal de Cátedra:</h4>
+        <p><strong>Russell, Stuart & Norvig, Peter:</strong> <a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline text-sky-400 hover:text-sky-300 font-semibold"><em>Inteligencia Artificial: Un Enfoque Moderno</em></a> (AIMA, 2da / 3ra Edición, Pearson / Prentice Hall).</p>
+        <ul>
+          <li><strong>Capítulo 4.1 (pp. 98-101):</strong> Estrategias de búsqueda con información (heurísticas) y Búsqueda primero el mejor.</li>
+          <li><strong>Capítulo 4.1.1 (pp. 101-104):</strong> Búsqueda voraz primero el mejor. Heurística de distancia en línea recta hDLR, caso Iasi a Fagaras y trampas en árboles.</li>
+          <li><strong>Capítulo 4.1.2 (pp. 104-106):</strong> Búsqueda A* (f = g + h). Trazabilidad de Arad a Bucarest y evaluación tardía en extracción de frontera.</li>
+          <li><strong>Capítulo 4.1.3 (pp. 106-110):</strong> Condiciones para la optimalidad: admisibilidad (árboles) y consistencia / monotonía (grafos). Desigualdad triangular.</li>
+          <li><strong>Capítulo 4.2.1 (pp. 110-112):</strong> Búsqueda heurística con memoria acotada: A* de profundidad iterativa (IDA* / A*PI).</li>
+          <li><strong>Capítulo 4.2.2 (pp. 112-115):</strong> Búsqueda recursiva del primero mejor (RBFS / BRPM). Límite alternativo (f_limit) y respaldo de f-valores.</li>
+          <li><strong>Capítulo 4.3 (pp. 116-121):</strong> Funciones heurísticas en el 8-puzzle (h1 piezas descolocadas, h2 distancia Manhattan), dominancia y problemas relajados.</li>
+        </ul>
+
+        <h4>Diapositivas Oficiales de Clase (Ing. Fabio D. Argañaraz):</h4>
+        <ul>
+          <li><code>4 - Búsqueda informada y exploración.pptx</code>: Heurísticas, Búsqueda primero el mejor, Búsqueda voraz (hDLR Rumania, ventajas falsas Iasi-Fagaras), A* (fórmula, óptimo 418 Arad-Bucarest), Desventaja de memoria de A*, IDA* y Búsqueda recursiva del primero mejor (BRPM / RBFS con traza paso a paso).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL GUÍA GIT / GITHUB ==================== -->
+  <div class="modal-overlay" id="modal-git">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">🚀 Flujo de Trabajo y Entrega con Git / GitHub</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Para resolver y entregar este Trabajo Práctico de manera individual, sigue estos pasos:</p>
+
+        <h4>Paso 1: Clonar o descargar tu fork del repositorio</h4>
+        <div class="code-block">git clone https://github.com/TU_USUARIO/TP3.git<br>cd TP3</div>
+
+        <h4>Paso 2: Resolver en el navegador</h4>
+        <p>Abre el archivo <code>index.html</code> con doble clic en tu navegador web. Tus respuestas se guardan automáticamente en tu navegador (localStorage) a medida que completas cada ejercicio.</p>
+
+        <h4>Paso 3: Exportar el archivo de respuestas</h4>
+        <p>Cuando la barra de progreso alcance el <strong>100%</strong> y hayas completado tus datos personales, presiona el botón <strong>"💾 Exportar Respuestas (.json)"</strong>. Guarda el archivo con el nombre exacto <code>respuestas_tp3.json</code> en la raíz del repositorio.</p>
+
+        <h4>Paso 4: Autoevaluación local con Python</h4>
+        <p>Abre tu terminal en la carpeta del TP y ejecuta:</p>
+        <div class="code-block">python autograder_tp3.py respuestas_tp3.json</div>
+        <p>El autograder verificará tus respuestas contra la rúbrica protegida local sin revelar las soluciones. Si tienes discrepancias, el reporte te indicará qué sección estudiar en la bibliografía.</p>
+
+        <h4>Paso 5: Confirmar y subir a GitHub</h4>
+        <div class="code-block">git add respuestas_tp3.json<br>git commit -m "Entrega TP3 - [Nombre y Apellido]"<br>git push origin main</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

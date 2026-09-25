@@ -1,0 +1,173 @@
+/* ==========================================================================
+   ESTILOS COMPLEMENTARIOS - TRABAJO PRÁCTICO N° 3 (LABORATORIO I - 2026)
+   Framework Principal: Tailwind CSS (Play CDN)
+   Estética: Academic Dark Glassmorphism
+   Cátedra: Laboratorio I - UCSE DASS | JTP: Ing. Fabio D. Argañaraz
+   ========================================================================== */
+
+/* Reseteo y fuentes globales */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #0b111e;
+  color: #f0f6fc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Modo claro (data-theme="light") */
+html[data-theme="light"] body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Halos luminosos de fondo */
+.bg-glow {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1100px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.14) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-theme="light"] .bg-glow {
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.08) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 80%);
+}
+
+/* Barra de desplazamiento ultrafina personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.5);
+}
+
+/* Estados activos para radio-card */
+.radio-card.active {
+  border-color: #0ea5e9 !important;
+  background-color: rgba(14, 165, 233, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.35);
+}
+
+/* Visor de código JSON */
+pre code {
+  font-family: 'Fira Code', monospace;
+}
+
+/* ==================== MODALS ==================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-box {
+  background: #0f172a;
+  border: 1px solid rgba(240, 246, 252, 0.15);
+  border-radius: 16px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+  color: #f0f6fc;
+}
+
+html[data-theme="light"] .modal-box {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(240, 246, 252, 0.1);
+  padding-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #f0f6fc;
+}
+
+.modal-body {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+html[data-theme="light"] .modal-body {
+  color: #334155;
+}
+
+.modal-body h4 {
+  color: #f0f6fc;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+
+html[data-theme="light"] .modal-body h4 {
+  color: #0f172a;
+}
+
+.modal-body ul {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.code-block {
+  background: #020617;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.82rem;
+  color: #38bdf8;
+  overflow-x: auto;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
