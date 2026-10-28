@@ -1,0 +1,82 @@
+{
+  "tp_id": "LAB1-2026-TP3",
+  "title": "TP N° 3: Búsqueda Informada y Exploración (Búsqueda Heurística)",
+  "timestamp": "2026-10-28T03:02:56.713Z",
+  "student": {
+    "name": "Lobo, Emanuel Mariano",
+    "dni": "38973583",
+    "email": "mariano_lobo94@hotmail.com",
+    "comision": "Turno Tarde",
+    "github_user": "LOBO01-BOT"
+  },
+  "answers": {
+    "ej1_fundamentos_busqueda_informada": {
+      "definicion_heuristica": "estimacion_costo_al_objetivo",
+      "problema_busquedas_ciegas": "ineficiencia_exploracion_a_ciegas",
+      "origen_conocimiento_heuristico": "conocimiento_adicional_dominio",
+      "evaluacion_primero_el_mejor": "expansion_menor_f"
+    },
+    "ej2_busqueda_voraz_greedy": {
+      "funcion_evaluacion_voraz": "f_igual_h",
+      "heuristica_dlr_rumania": "distancia_linea_recta_bucarest",
+      "optimalidad_voraz": "no_optima_decisiones_miopes",
+      "completitud_voraz_arboles": "incompleta_en_arboles"
+    },
+    "ej3_trampas_voraz_caso_iasi_fagaras": {
+      "eleccion_erronea_iasi": "sugiere_neamt_menor_distancia",
+      "naturaleza_neamt": "callejon_sin_salida",
+      "camino_real_solucion": "vaslui_urziceni_bucarest_fagaras",
+      "consecuencia_arbol_sin_explorados": "oscilacion_infinita_iasi_neamt"
+    },
+    "ej4_algoritmo_a_estrella": {
+      "composicion_f": "f_igual_g_mas_h",
+      "significado_f": "costo_estimado_solucion_via_n",
+      "momento_test_objetivo_a_star": "al_extraer_para_expansion",
+      "estructura_frontera": "cola_prioridad_menor_f"
+    },
+    "ej5_trazabilidad_a_estrella_rumania": {
+      "paso1_expansion_arad": "sibiu_f393",
+      "paso2_expansion_sibiu": "rimnicu_vilcea_f413",
+      "decision_fagaras_vs_pitesti": "expande_pitesti_antes_f417_menor_450",
+      "costo_camino_optimo": "costo_optimo_418"
+    },
+    "ej6_admisibilidad_consistencia": {
+      "definicion_admisibilidad": "nunca_sobrestima_costo_real",
+      "optimalidad_en_arboles": "a_star_arbol_optimo_si_admisible",
+      "definicion_consistencia": "desigualdad_triangular_paso",
+      "optimalidad_en_grafos": "a_star_grafo_optimo_primera_expansion",
+      "relacion_entre_ambas": "consistente_implica_admisible"
+    },
+    "ej7_desventaja_memoria_y_ida_star": {
+      "principal_desventaja_a_star": "consumo_memoria_exponencial",
+      "fundamento_ida_star": "corte_por_f_coste",
+      "actualizacion_cota_corte": "menor_f_que_excedio_corte",
+      "complejidad_espacial_ida_star": "espacio_lineal_b_d"
+    },
+    "ej8_busqueda_recursiva_primero_mejor": {
+      "objetivo_diseno_rbfs": "imitar_primero_mejor_espacio_lineal",
+      "concepto_f_limit": "f_valor_mejor_camino_alternativo_antepasados",
+      "mecanismo_respaldo_unwind": "respalda_mejor_f_de_hijos_en_ancestro",
+      "desventaja_principal_rbfs": "regeneracion_excesiva_oscilacion_caminos_cercanos"
+    },
+    "ej9_diseno_heuristicas_8puzzle": {
+      "heuristica_h1_piezas_descolocadas": "piezas_fuera_de_lugar",
+      "heuristica_h2_distancia_manhattan": "suma_distancias_manhattan_a_meta",
+      "concepto_dominancia": "h2_domina_a_h1_menos_nodos",
+      "origen_problemas_relajados": "relajar_restricciones_acciones_originales",
+      "combinacion_max_heuristicas": "max_es_admisible_y_domina"
+    },
+    "ej10_matriz_comparativa_busquedas_informadas": {
+      "voraz_criterio_completitud": "incompleta_arboles_completa_grafos_finitos",
+      "a_star_criterio_completitud": "completa_si_b_finito_y_costos_positivos",
+      "voraz_criterio_optimalidad": "no_optima",
+      "a_star_criterio_optimalidad": "optima_admisible_arbol_consistente_grafo",
+      "ida_star_criterio_optimalidad": "optima_con_h_admisible",
+      "rbfs_criterio_optimalidad": "optima_con_h_admisible_no_decreciente",
+      "voraz_criterio_espacio": "exponencial_b_m",
+      "a_star_criterio_espacio": "exponencial_b_d_gran_limitacion",
+      "ida_star_criterio_espacio": "lineal_b_d_elimina_cuello_botella",
+      "rbfs_criterio_espacio": "lineal_b_d_imita_primero_mejor"
+    }
+  }
+}
